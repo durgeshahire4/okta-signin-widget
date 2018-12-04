@@ -3,10 +3,6 @@
 
 import { widgetOptions as signinWidgetOptions} from '../.widgetrc';
 
-signinWidgetOptions.features = {
-  useFormPost: true
-}
-
 const signIn = new OktaSignIn(signinWidgetOptions);
 
 signIn.renderEl(

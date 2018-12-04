@@ -13,9 +13,10 @@
 define([
   'okta',
   'util/FormController',
+  'util/RedirectUtil',
   'views/enroll-factors/Footer'
 ],
-function (Okta, FormController, Footer) {
+function (Okta, FormController, RedirectUtil, Footer) {
 
   var _ = Okta._;
   var { Util } = Okta.internal.util;
@@ -38,7 +39,7 @@ function (Okta, FormController, Footer) {
               setTransaction(trans);
               var url = this.appState.get('enrollCustomFactorRedirectUrl');
               if(url !== null) {
-                Util.redirect(url);
+                RedirectUtil.formRedirectTo(url);
               }
             })
             .fail(function (err) {

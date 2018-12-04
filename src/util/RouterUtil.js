@@ -14,12 +14,13 @@
 define([
   'okta',
   './OAuth2Util',
+  './RedirectUtil',
   './Enums',
   './BrowserFeatures',
   './Errors',
   './ErrorCodes'
 ],
-function (Okta, OAuth2Util, Enums, BrowserFeatures, Errors, ErrorCodes) {
+function (Okta, OAuth2Util, RedirectUtil, Enums, BrowserFeatures, Errors, ErrorCodes) {
 
   var { Util } = Okta.internal.util;
   var fn = {};
@@ -130,26 +131,7 @@ function (Okta, OAuth2Util, Enums, BrowserFeatures, Errors, ErrorCodes) {
         successData.stepUp = {
           url: targetUrl,
           finish: function () {
-            if (!router.settings.get('features.useFormPost')) {
-              Util.redirect(targetUrl);
-              return;
-            }
-
-            var form = document.createElement('form');
-            form.method = 'get';
-            form.action = targetUrl.split('?')[0];
-
-            // This is a terrible workaround for the fact that
-            // {url}/redirect?stateToken=... 
-            // doesn't support POST right now
-            var stateTokenParameterInput = document.createElement('input');
-            stateTokenParameterInput.name = 'stateToken';
-            stateTokenParameterInput.type = 'hidden';
-            stateTokenParameterInput.value = targetUrl.split('=')[1];
-            form.appendChild(stateTokenParameterInput);
-
-            document.body.appendChild(form);
-            form.submit();
+            RedirectUtil.formRedirectTo(targetUrl);
           }
         };
       } else {
@@ -164,16 +146,7 @@ function (Okta, OAuth2Util, Enums, BrowserFeatures, Errors, ErrorCodes) {
               redirectUrl: encodeURIComponent(redirectUrl)
             });
 
-            if (!router.settings.get('features.useFormPost')) {
-              Util.redirect(url);
-              return;
-            }
-
-            var form = document.createElement('form');
-            form.method = 'post';
-            form.action = url;
-            document.body.appendChild(form);
-            form.submit();
+            RedirectUtil.formRedirectTo(url);
           }
         };
       }

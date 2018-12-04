@@ -14,9 +14,10 @@ define([
   'okta',
   'util/FormController',
   'util/FormType',
+  'util/RedirectUtil',
   'views/expired-password/Footer'
 ],
-function (Okta, FormController, FormType, Footer) {
+function (Okta, FormController, FormType, RedirectUtil, Footer) {
 
   var _ = Okta._;
   var { Util } = Okta.internal.util;
@@ -58,7 +59,7 @@ function (Okta, FormController, FormType, Footer) {
             className: 'button button-primary button-wide',
             attributes: {'data-se': 'custom-button'},
             click: function () {
-              Util.redirect(this.options.appState.get('passwordExpiredLinkUrl'));
+              RedirectUtil.formRedirectTo(this.options.appState.get('passwordExpiredLinkUrl'));
             }
           })
         ];
